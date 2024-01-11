@@ -1,18 +1,17 @@
 using Beacon.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Beacon.Server.Models
+namespace Beacon.Server.Models;
+
+public class AppDbContext : DbContext
 {
-    public class AppDbContext : DbContext
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
 
         }
 
-        public DbSet<Person> People => Set<Person>();
-        public DbSet<Address> Addresses => Set<Address>();
-        public DbSet<Upload> Uploads => Set<Upload>();
-        public DbSet<User> Users => Set<User>();
-    }
+    public DbSet<Person> People => Set<Person>();
+    public DbSet<Address> Addresses => Set<Address>();
+    public DbSet<Upload> Uploads => Set<Upload>();
+    public DbSet<User> Users => Set<User>();
 }

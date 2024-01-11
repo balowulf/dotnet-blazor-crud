@@ -1,12 +1,12 @@
 using Beacon.Shared.Models;
 using Bogus;
 
-namespace Beacon.Server.Models
+namespace Beacon.Server.Models;
+
+public class DataGenerator
 {
-    public class DataGenerator
+    public static void Initialize(AppDbContext appDbContext)
     {
-        public static void Initialize(AppDbContext appDbContext)
-        {
             Randomizer.Seed = new Random(32321);
             appDbContext.Database.EnsureDeleted();
             appDbContext.Database.EnsureCreated();
@@ -82,5 +82,4 @@ namespace Beacon.Server.Models
                 appDbContext.SaveChanges();
             }
         }
-    }
 }

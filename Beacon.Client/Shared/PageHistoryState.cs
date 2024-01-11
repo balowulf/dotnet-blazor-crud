@@ -1,21 +1,21 @@
-namespace Beacon.Client.Shared
-{
-    public class PageHistoryState
-    {
-        private List<string> previousPages;
+namespace Beacon.Client.Shared;
 
-        public PageHistoryState()
-        {
+public class PageHistoryState
+{
+    private List<string> previousPages;
+
+    public PageHistoryState()
+    {
             previousPages = new List<string>();
         }
 
-        public void AddPageToHistory(string PageName)
-        {
+    public void AddPageToHistory(string PageName)
+    {
             previousPages.Add(PageName);
         }
 
-        public string GetGoBackPage()
-        {
+    public string GetGoBackPage()
+    {
             if (previousPages.Count > 1)
             {
                 // page added on initialization, return second from last
@@ -25,9 +25,8 @@ namespace Beacon.Client.Shared
             return previousPages.FirstOrDefault();
         }
 
-        public bool CanGoBack()
-        {
+    public bool CanGoBack()
+    {
             return previousPages.Count > 1;
         }
-    }
 }

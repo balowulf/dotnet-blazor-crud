@@ -4,20 +4,20 @@ using Beacon.Shared.Data;
 using Beacon.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Beacon.Server.Models
-{
-    public class UserRepository : IUserRepository
-    {
-        private readonly AppDbContext _appDbContext;
-        private IJwtUtils _jwtUtils;
+namespace Beacon.Server.Models;
 
-        public UserRepository(AppDbContext appDbContext, IJwtUtils jwtUtils)
-        {
+public class UserRepository : IUserRepository
+{
+    private readonly AppDbContext _appDbContext;
+    private IJwtUtils _jwtUtils;
+
+    public UserRepository(AppDbContext appDbContext, IJwtUtils jwtUtils)
+    {
             _appDbContext = appDbContext;
             _jwtUtils = jwtUtils;
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest request)
+    public AuthenticateResponse Authenticate(AuthenticateRequest request)
     {
         var _user = _appDbContext.Users.SingleOrDefault(u => u.Username == request.Username);
 
@@ -35,8 +35,8 @@ namespace Beacon.Server.Models
         return response;
     }
 
-        public PagedResult<User> GetUsers(string? name, int page)
-        {
+    public PagedResult<User> GetUsers(string? name, int page)
+    {
             int pageSize = 5;
 
             if (name != null)
@@ -56,8 +56,8 @@ namespace Beacon.Server.Models
             }
         }
 
-        public async Task<User?> GetUser(int Id)
-        {
+    public async Task<User?> GetUser(int Id)
+    {
             var result = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Id==Id);
             if (result != null)
             {
@@ -69,8 +69,8 @@ namespace Beacon.Server.Models
             }
         }
         
-        public async Task<User> AddUser(User user)
-        {
+    public async Task<User> AddUser(User user)
+    {
             // validate unique
             if (_appDbContext.Users.Any(u => u.Username == user.Username))
                 throw new AppException("Username '" + user.Username + "' is already taken");
@@ -85,8 +85,8 @@ namespace Beacon.Server.Models
             return result.Entity;
         }
 
-        public async Task<User?> UpdateUser(User user)
-        {
+    public async Task<User?> UpdateUser(User user)
+    {
             var result = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Id==user.Id);
 
             // cannot update admin
@@ -117,8 +117,8 @@ namespace Beacon.Server.Models
             return result;
         }
 
-        public async Task<User?> DeleteUser(int Id)
-        {
+    public async Task<User?> DeleteUser(int Id)
+    {
             var result = await _appDbContext.Users.FirstOrDefaultAsync(u => u.Id==Id);
 
             // cannot delete admin
@@ -136,5 +136,4 @@ namespace Beacon.Server.Models
             }
             return result;
         }
-    }
 }

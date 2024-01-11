@@ -1,11 +1,11 @@
 using FluentValidation;
 
-namespace Beacon.Shared.Models
+namespace Beacon.Shared.Models;
+
+public class UserValidator : AbstractValidator<User>
 {
-    public class UserValidator : AbstractValidator<User>
+    public UserValidator()
     {
-        public UserValidator()
-        {
             CascadeMode = CascadeMode.Stop;
 
             RuleFor(user => user.FirstName).NotEmpty().WithMessage("First name is a required field.")
@@ -17,5 +17,4 @@ namespace Beacon.Shared.Models
             RuleFor(user => user.Password).NotEmpty().WithMessage("Password is a required field.")
                 .Length(6, 50).WithMessage("Password must be between 6 and 50 characters.");
         }
-    }
 }

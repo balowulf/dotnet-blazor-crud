@@ -2,18 +2,17 @@ using Microsoft.AspNetCore.Components;
 using System.Collections.Specialized;
 using System.Web;
 
-namespace Beacon.Client.Shared
+namespace Beacon.Client.Shared;
+
+public static class ExtensionMethods
 {
-    public static class ExtensionMethods
+    public static NameValueCollection QueryString(this NavigationManager navigationManager)
     {
-        public static NameValueCollection QueryString(this NavigationManager navigationManager)
-        {
             return HttpUtility.ParseQueryString(new Uri(navigationManager.Uri).Query);
         }
 
-        public static string QueryString(this NavigationManager navigationManager, string key)
-        {
+    public static string QueryString(this NavigationManager navigationManager, string key)
+    {
             return navigationManager.QueryString()[key];
         }
-    }
 }

@@ -1,14 +1,14 @@
 using Quartz;
 
-namespace Beacon.Server.Services
+namespace Beacon.Server.Services;
+
+public static class ServiceCollectionQuartzConfiguratorExtensions
 {
-    public static class ServiceCollectionQuartzConfiguratorExtensions
+    public static void AddJobAndTrigger<T>(
+        this IServiceCollectionQuartzConfigurator quartz,
+        IConfiguration config)
+        where T : IJob
     {
-        public static void AddJobAndTrigger<T>(
-            this IServiceCollectionQuartzConfigurator quartz,
-            IConfiguration config)
-            where T : IJob
-        {
             string jobName = typeof(T).Name;
 
             var configKey = $"Quartz:{jobName}";
@@ -29,5 +29,4 @@ namespace Beacon.Server.Services
                 .WithCronSchedule(cronSchedule));
 
         }
-    }
 }

@@ -1,9 +1,9 @@
-namespace Beacon.Shared.Data
+namespace Beacon.Shared.Data;
+
+public static class PagedResultExtensions
 {
-    public static class PagedResultExtensions
+    public static PagedResult<T> GetPaged<T>(this IQueryable<T> query, int page, int pageSize) where T : class
     {
-        public static PagedResult<T> GetPaged<T>(this IQueryable<T> query, int page, int pageSize) where T : class
-        {
             var result = new PagedResult<T>();
             result.CurrentPage = page;
             result.PageSize = pageSize;
@@ -17,5 +17,4 @@ namespace Beacon.Shared.Data
 
             return result;
         }
-    }
 }

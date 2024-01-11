@@ -2,26 +2,26 @@ using Beacon.Shared.Data;
 using Beacon.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Beacon.Server.Models
-{
-    public class UploadRepository : IUploadRepository
-    {
-        private readonly AppDbContext _appDbContext;
+namespace Beacon.Server.Models;
 
-        public UploadRepository(AppDbContext appDbContext)
-        {
+public class UploadRepository : IUploadRepository
+{
+    private readonly AppDbContext _appDbContext;
+
+    public UploadRepository(AppDbContext appDbContext)
+    {
             _appDbContext = appDbContext;
         }
 
-        public async Task<Upload> AddUpload(Upload upload)
-        {
+    public async Task<Upload> AddUpload(Upload upload)
+    {
             var result = await _appDbContext.Uploads.AddAsync(upload);
             await _appDbContext.SaveChangesAsync();
             return result.Entity;
         }
 
-        public async Task<Upload?> DeleteUpload(int Id)
-        {
+    public async Task<Upload?> DeleteUpload(int Id)
+    {
             var result = await _appDbContext.Uploads.FirstOrDefaultAsync(u => u.Id==Id);
             if (result!=null)
             {
@@ -35,8 +35,8 @@ namespace Beacon.Server.Models
             return result;
         }
 
-        public async Task<Upload?> GetUpload(int Id)
-        {
+    public async Task<Upload?> GetUpload(int Id)
+    {
             var result = await _appDbContext.Uploads.FirstOrDefaultAsync(u => u.Id==Id);
             if(result != null)
             {
@@ -48,8 +48,8 @@ namespace Beacon.Server.Models
             }
         }
 
-        public PagedResult<Upload> GetUploads(string? name, int page)
-        {
+    public PagedResult<Upload> GetUploads(string? name, int page)
+    {
             int pageSize = 5;
 
             if (name != null)
@@ -67,8 +67,8 @@ namespace Beacon.Server.Models
             }
         }
 
-        public async Task<Upload?> UpdateUpload(Upload upload)
-        {
+    public async Task<Upload?> UpdateUpload(Upload upload)
+    {
             var result = await _appDbContext.Uploads.FirstOrDefaultAsync(u => u.Id==upload.Id);
             if (result!=null)
             {
@@ -82,5 +82,4 @@ namespace Beacon.Server.Models
             }
             return result;
         }
-    }
 }
