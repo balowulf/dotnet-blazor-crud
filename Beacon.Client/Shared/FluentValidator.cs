@@ -2,17 +2,17 @@ using FluentValidation;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace Beacon.Client.Shared
+namespace Beacon.Client.Shared;
+
+public class FluentValidator<TValidator> : ComponentBase where TValidator : IValidator, new()
 {
-    public class FluentValidator<TValidator> : ComponentBase where TValidator : IValidator, new()
+    private readonly static char[] separators = new[] { '.', '[' };
+    private TValidator validator;
+
+    [CascadingParameter] private EditContext EditContext { get; set; }
+
+    protected override void OnInitialized()
     {
-        private readonly static char[] separators = new[] { '.', '[' };
-        private TValidator validator;
-
-        [CascadingParameter] private EditContext EditContext { get; set; }
-
-        protected override void OnInitialized()
-        {
             validator = new TValidator();
             var messages = new ValidationMessageStore(EditContext);
 
@@ -26,8 +26,8 @@ namespace Beacon.Client.Shared
                 => ValidateModel((EditContext)sender, messages);
         }
 
-        private void ValidateModel(EditContext editContext, ValidationMessageStore messages)
-        {
+    private void ValidateModel(EditContext editContext, ValidationMessageStore messages)
+    {
             var context = new ValidationContext<object>(editContext.Model);
             var validationResult = validator.Validate(context);
             messages.Clear();
@@ -39,8 +39,8 @@ namespace Beacon.Client.Shared
             editContext.NotifyValidationStateChanged();
         }
 
-        private static FieldIdentifier ToFieldIdentifier(EditContext editContext, string propertyPath)
-        {
+    private static FieldIdentifier ToFieldIdentifier(EditContext editContext, string propertyPath)
+    {
             // This method parses property paths like 'SomeProp.MyCollection[123].ChildProp'
             // and returns a FieldIdentifier which is an (instance, propName) pair. For example,
             // it would return the pair (SomeProp.MyCollection[123], "ChildProp"). It traverses
@@ -90,5 +90,4 @@ namespace Beacon.Client.Shared
                 obj = newObj;
             }
         }
-    }
 }

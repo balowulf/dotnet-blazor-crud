@@ -1,17 +1,16 @@
 using Beacon.Shared.Data;
 using Beacon.Shared.Models;
 
-namespace Beacon.Client.Services
+namespace Beacon.Client.Services;
+
+public interface IUploadService
 {
-    public interface IUploadService
-    {
-        Task<PagedResult<Upload>> GetUploads(string? name, string page);
-        Task<Upload> GetUpload(int id);
+    Task<PagedResult<Upload>> GetUploads(string? name, string page);
+    Task<Upload> GetUpload(int id);
 
-        Task DeleteUpload(int id);
+    Task DeleteUpload(int id);
 
-        Task AddUpload(Upload upload);
+    Task AddUpload(Upload upload);
 
-        Task UpdateUpload(Upload upload);
-    }
+    Task UpdateUpload(Upload upload);
 }

@@ -1,11 +1,11 @@
 using FluentValidation;
 
-namespace Beacon.Shared.Models
+namespace Beacon.Shared.Models;
+
+public class AddressValidator : AbstractValidator<Address>
 {
-    public class AddressValidator : AbstractValidator<Address>
+    public AddressValidator()
     {
-        public AddressValidator()
-        {
             CascadeMode = CascadeMode.Stop;
 
             RuleFor(address => address.Street).NotEmpty().WithMessage("Street is a required field.")
@@ -17,5 +17,4 @@ namespace Beacon.Shared.Models
             RuleFor(address => address.ZipCode).NotEmpty().WithMessage("Zip code is a required field.")
                 .Length(5, 30).WithMessage("Zip code must be between 5 and 30 characters.");
         }
-    }
 }

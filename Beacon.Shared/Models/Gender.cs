@@ -1,9 +1,8 @@
-namespace Beacon.Shared.Models
+namespace Beacon.Shared.Models;
+
+public enum Gender
 {
-    public enum Gender
-    {
-        Male,
-        Female,
-        Other
-    }
+    Male,
+    Female,
+    Other
 }

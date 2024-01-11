@@ -1,13 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Beacon.Client.Shared
-{
-    public class Login
-    {
-        [Required]
-        public string Username { get; set; }
+namespace Beacon.Client.Shared;
 
-        [Required]
-        public string Password { get; set; }
-    }
+public class Login
+{
+    [Required]
+    public string Username { get; set; }
+
+    [Required]
+    public string Password { get; set; }
 }

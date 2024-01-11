@@ -3,22 +3,22 @@ using Beacon.Shared.Models;
 using Quartz;
 using System.Text.Json;
 
-namespace Beacon.Server.Services
-{
-    [DisallowConcurrentExecution]
-    public class UploadProcessorJob : IJob
-    {
-        private readonly ILogger<UploadProcessorJob> _logger;
-        private readonly AppDbContext _appDbContext;
+namespace Beacon.Server.Services;
 
-        public UploadProcessorJob(ILogger<UploadProcessorJob> logger, AppDbContext appDbContext)
-        {
+[DisallowConcurrentExecution]
+public class UploadProcessorJob : IJob
+{
+    private readonly ILogger<UploadProcessorJob> _logger;
+    private readonly AppDbContext _appDbContext;
+
+    public UploadProcessorJob(ILogger<UploadProcessorJob> logger, AppDbContext appDbContext)
+    {
             _logger = logger;
             _appDbContext = appDbContext;
         }
 
-        public Task Execute(IJobExecutionContext context)
-        {
+    public Task Execute(IJobExecutionContext context)
+    {
             _logger.LogInformation("File Processing Job Initiated: " + DateTime.Now.ToString("dddd, MMMM dd, yyyy HH:mm:ss.fffK"));
             List<Upload> unprocessedUploads = GetUnprocessedUploads();
             _logger.LogInformation("Count of files requiring processing: " + unprocessedUploads.Count);
@@ -30,16 +30,16 @@ namespace Beacon.Server.Services
             return Task.CompletedTask;
         }
 
-        private List<Upload> GetUnprocessedUploads()
-        {
+    private List<Upload> GetUnprocessedUploads()
+    {
             List<Upload> unprocessedUploads = (from u in _appDbContext.Uploads
                                                 where u.ProcessedTimestamp.HasValue != true
                                                 select u).ToList();
             return unprocessedUploads;
         }
 
-        private void ProcessFiles(List<Upload> uploads)
-        {
+    private void ProcessFiles(List<Upload> uploads)
+    {
             foreach (Upload u in uploads)
             {
                 byte[] base64Data = System.Convert.FromBase64String(u.FileContent);
@@ -65,5 +65,4 @@ namespace Beacon.Server.Services
                 }
             }
         }
-    }
 }

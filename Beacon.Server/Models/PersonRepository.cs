@@ -2,26 +2,26 @@ using Beacon.Shared.Data;
 using Beacon.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Beacon.Server.Models
-{
-    public class PersonRepository:IPersonRepository
-    {
-        private readonly AppDbContext _appDbContext;
+namespace Beacon.Server.Models;
 
-        public PersonRepository(AppDbContext appDbContext)
-        {
+public class PersonRepository:IPersonRepository
+{
+    private readonly AppDbContext _appDbContext;
+
+    public PersonRepository(AppDbContext appDbContext)
+    {
             _appDbContext = appDbContext;
         }
 
-        public async Task<Person> AddPerson(Person person)
-        {
+    public async Task<Person> AddPerson(Person person)
+    {
             var result = await _appDbContext.People.AddAsync(person);
             await _appDbContext.SaveChangesAsync();
             return result.Entity;
         }
 
-        public async Task<Person?> DeletePerson(int personId)
-        {
+    public async Task<Person?> DeletePerson(int personId)
+    {
             var result = await _appDbContext.People.FirstOrDefaultAsync(p => p.PersonId==personId);
             if (result!=null)
             {
@@ -35,8 +35,8 @@ namespace Beacon.Server.Models
             return result;
         }
 
-        public async Task<Person?> GetPerson(int personId)
-        {
+    public async Task<Person?> GetPerson(int personId)
+    {
             var result = await _appDbContext.People
                 .Include(p => p.Addresses)
                 .FirstOrDefaultAsync(p => p.PersonId==personId);
@@ -50,8 +50,8 @@ namespace Beacon.Server.Models
             }
         }
 
-        public PagedResult<Person> GetPeople(string? name, int page)
-        {
+    public PagedResult<Person> GetPeople(string? name, int page)
+    {
             int pageSize = 5;
             
             if (name != null)
@@ -72,8 +72,8 @@ namespace Beacon.Server.Models
             }
         }
 
-        public async Task<Person?> UpdatePerson(Person person)
-        {
+    public async Task<Person?> UpdatePerson(Person person)
+    {
             var result = await _appDbContext.People.Include("Addresses").FirstOrDefaultAsync(p => p.PersonId==person.PersonId);
             if (result!=null)
             {
@@ -116,5 +116,4 @@ namespace Beacon.Server.Models
             }
             return result;
         }
-    }
 }

@@ -6,92 +6,92 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
-namespace Beacon.Client.Shared
+namespace Beacon.Client.Shared;
+
+public interface IHttpService
 {
-    public interface IHttpService
-    {
-        Task<T> Get<T>(string uri);
-        Task Post(string uri, object value);
-        Task<T> Post<T>(string uri, object value);
-        Task Put(string uri, object value);
-        Task<T> Put<T>(string uri, object value);
-        Task Delete(string uri);
-        Task<T> Delete<T>(string uri);
-    }
+    Task<T> Get<T>(string uri);
+    Task Post(string uri, object value);
+    Task<T> Post<T>(string uri, object value);
+    Task Put(string uri, object value);
+    Task<T> Put<T>(string uri, object value);
+    Task Delete(string uri);
+    Task<T> Delete<T>(string uri);
+}
 
-    public class HttpService : IHttpService
-    {
-        private HttpClient _httpClient;
-        private NavigationManager _navigationManager;
-        private ILocalStorageService _localStorageService;
-        private IConfiguration _configuration;
+public class HttpService : IHttpService
+{
+    private HttpClient _httpClient;
+    private NavigationManager _navigationManager;
+    private ILocalStorageService _localStorageService;
+    private IConfiguration _configuration;
 
-        public HttpService(
-            HttpClient httpClient,
-            NavigationManager navigationManager,
-            ILocalStorageService localStorageService,
-            IConfiguration configuration
-        ) {
+    public HttpService(
+        HttpClient httpClient,
+        NavigationManager navigationManager,
+        ILocalStorageService localStorageService,
+        IConfiguration configuration
+    ) {
             _httpClient = httpClient;
             _navigationManager = navigationManager;
             _localStorageService = localStorageService;
             _configuration = configuration;
         }
 
-        public async Task<T> Get<T>(string uri)
-        {
+    public async Task<T> Get<T>(string uri)
+    {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
             return await sendRequest<T>(request);
         }
 
-        public async Task Post(string uri, object value)
-        {
+    public async Task Post(string uri, object value)
+    {
             var request = createRequest(HttpMethod.Post, uri, value);
             await sendRequest(request);
         }
 
-        public async Task<T> Post<T>(string uri, object value)
-        {
+    public async Task<T> Post<T>(string uri, object value)
+    {
             var request = createRequest(HttpMethod.Post, uri, value);
             return await sendRequest<T>(request);
         }
 
-        public async Task Put(string uri, object value)
-        {
+    public async Task Put(string uri, object value)
+    {
             var request = createRequest(HttpMethod.Put, uri, value);
             await sendRequest(request);
         }
 
-        public async Task<T> Put<T>(string uri, object value)
-        {
+    public async Task<T> Put<T>(string uri, object value)
+    {
             var request = createRequest(HttpMethod.Put, uri, value);
             return await sendRequest<T>(request);
         }
 
-        public async Task Delete(string uri)
-        {
+    public async Task Delete(string uri)
+    {
             var request = createRequest(HttpMethod.Delete, uri);
             await sendRequest(request);
         }
 
-        public async Task<T> Delete<T>(string uri)
-        {
+    public async Task<T> Delete<T>(string uri)
+    {
             var request = createRequest(HttpMethod.Delete, uri);
             return await sendRequest<T>(request);
         }
 
-        // helper methods
+    // helper methods
 
-        private HttpRequestMessage createRequest(HttpMethod method, string uri, object value = null)
-        {
+    private HttpRequestMessage createRequest(HttpMethod method, string uri, object value = null)
+    {
             var request = new HttpRequestMessage(method, uri);
             if (value != null)
                 request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
             return request;
         }
 
-        private async Task sendRequest(HttpRequestMessage request)
-        {
+    private async Task sendRequest(HttpRequestMessage request)
+    {
             await addJwtHeader(request);
 
             // send request
@@ -107,8 +107,8 @@ namespace Beacon.Client.Shared
             await handleErrors(response);
         }
 
-        private async Task<T> sendRequest<T>(HttpRequestMessage request)
-        {
+    private async Task<T> sendRequest<T>(HttpRequestMessage request)
+    {
             await addJwtHeader(request);
             
             // send request
@@ -129,8 +129,8 @@ namespace Beacon.Client.Shared
             return await response.Content.ReadFromJsonAsync<T>(options);
         }
 
-        private async Task addJwtHeader(HttpRequestMessage request)
-        {
+    private async Task addJwtHeader(HttpRequestMessage request)
+    {
             // add jwt auth header if user is logged in and request is to the api url
             var user = await _localStorageService.GetItem<User>("user");
             var isApiUrl = !request.RequestUri.IsAbsoluteUri;
@@ -138,8 +138,8 @@ namespace Beacon.Client.Shared
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
         }
 
-        private async Task handleErrors(HttpResponseMessage response)
-        {
+    private async Task handleErrors(HttpResponseMessage response)
+    {
             // throw exception on error response
             if (!response.IsSuccessStatusCode)
             {
@@ -147,5 +147,4 @@ namespace Beacon.Client.Shared
                 throw new Exception(error["message"]);
             }
         }
-    }
 }

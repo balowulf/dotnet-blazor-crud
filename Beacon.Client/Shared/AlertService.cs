@@ -1,23 +1,23 @@
-namespace Beacon.Client.Shared
+namespace Beacon.Client.Shared;
+
+public interface IAlertService
 {
-    public interface IAlertService
-    {
-        event Action<AlertModel> OnAlert;
-        void Success(string message, bool keepAfterRouteChange = false, bool autoClose = true);
-        void Error(string message, bool keepAfterRouteChange = false, bool autoClose = true);
-        void Info(string message, bool keepAfterRouteChange = false, bool autoClose = true);
-        void Warn(string message, bool keepAfterRouteChange = false, bool autoClose = true);
-        void Alert(AlertModel alert);
-        void Clear(string id = null);
-    }
+    event Action<AlertModel> OnAlert;
+    void Success(string message, bool keepAfterRouteChange = false, bool autoClose = true);
+    void Error(string message, bool keepAfterRouteChange = false, bool autoClose = true);
+    void Info(string message, bool keepAfterRouteChange = false, bool autoClose = true);
+    void Warn(string message, bool keepAfterRouteChange = false, bool autoClose = true);
+    void Alert(AlertModel alert);
+    void Clear(string id = null);
+}
 
-    public class AlertService : IAlertService
-    {
-        private const string _defaultId = "default-alert";
-        public event Action<AlertModel> OnAlert;
+public class AlertService : IAlertService
+{
+    private const string _defaultId = "default-alert";
+    public event Action<AlertModel> OnAlert;
 
-        public void Success(string message, bool keepAfterRouteChange = false, bool autoClose = true)
-        {
+    public void Success(string message, bool keepAfterRouteChange = false, bool autoClose = true)
+    {
             this.Alert(new AlertModel
             {
                 Type = AlertType.Success,
@@ -27,8 +27,8 @@ namespace Beacon.Client.Shared
             });
         }        
 
-        public void Error(string message, bool keepAfterRouteChange = false, bool autoClose = true)
-        {
+    public void Error(string message, bool keepAfterRouteChange = false, bool autoClose = true)
+    {
             this.Alert(new AlertModel
             {
                 Type = AlertType.Error,
@@ -38,8 +38,8 @@ namespace Beacon.Client.Shared
             });
         }        
 
-        public void Info(string message, bool keepAfterRouteChange = false, bool autoClose = true)
-        {
+    public void Info(string message, bool keepAfterRouteChange = false, bool autoClose = true)
+    {
             this.Alert(new AlertModel
             {
                 Type = AlertType.Info,
@@ -49,8 +49,8 @@ namespace Beacon.Client.Shared
             });
         }        
 
-        public void Warn(string message, bool keepAfterRouteChange = false, bool autoClose = true)
-        {
+    public void Warn(string message, bool keepAfterRouteChange = false, bool autoClose = true)
+    {
             this.Alert(new AlertModel
             {
                 Type = AlertType.Warning,
@@ -60,15 +60,14 @@ namespace Beacon.Client.Shared
             });
         }        
 
-        public void Alert(AlertModel alert)
-        {
+    public void Alert(AlertModel alert)
+    {
             alert.Id = alert.Id ?? _defaultId;
             this.OnAlert?.Invoke(alert);
         }
 
-        public void Clear(string id = _defaultId)
-        {
+    public void Clear(string id = _defaultId)
+    {
             this.OnAlert?.Invoke(new AlertModel { Id = id });
         }
-    }
 }

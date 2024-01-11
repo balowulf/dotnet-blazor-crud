@@ -2,40 +2,39 @@ using Beacon.Client.Shared;
 using Beacon.Shared.Data;
 using Beacon.Shared.Models;
 
-namespace Beacon.Client.Services
-{
-    public class UploadService: IUploadService
-    {
-        private readonly IHttpService _httpService;
+namespace Beacon.Client.Services;
 
-        public UploadService(IHttpService httpService)
-        {
+public class UploadService: IUploadService
+{
+    private readonly IHttpService _httpService;
+
+    public UploadService(IHttpService httpService)
+    {
             _httpService=httpService;
         }
 
-        public async Task<PagedResult<Upload>> GetUploads(string? name, string page)
-        {
+    public async Task<PagedResult<Upload>> GetUploads(string? name, string page)
+    {
             return await _httpService.Get<PagedResult<Upload>>("api/upload" + "?page=" + page + "&name=" + name);
         }
 
-        public async Task<Upload> GetUpload(int id)
-        {
+    public async Task<Upload> GetUpload(int id)
+    {
             return await _httpService.Get<Upload>($"api/upload/{id}");
         }
 
-        public async Task DeleteUpload(int id)
-        {
+    public async Task DeleteUpload(int id)
+    {
             await _httpService.Delete($"api/upload/{id}");
         }
 
-        public async Task AddUpload(Upload upload)
-        {
+    public async Task AddUpload(Upload upload)
+    {
             await _httpService.Post($"api/upload", upload);
         }
 
-        public async Task UpdateUpload(Upload upload)
-        {
+    public async Task UpdateUpload(Upload upload)
+    {
             await _httpService.Put($"api/upload", upload);
         }
-    }
 }

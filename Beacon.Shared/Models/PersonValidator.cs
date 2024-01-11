@@ -1,11 +1,11 @@
 using FluentValidation;
 
-namespace Beacon.Shared.Models
+namespace Beacon.Shared.Models;
+
+public class PersonValidator : AbstractValidator<Person>
 {
-    public class PersonValidator : AbstractValidator<Person>
+    public PersonValidator()
     {
-        public PersonValidator()
-        {
             CascadeMode = CascadeMode.Stop;
 
             RuleFor(person => person.FirstName).NotEmpty().WithMessage("First name is a required field.")
@@ -19,5 +19,4 @@ namespace Beacon.Shared.Models
             RuleFor(person => person.Addresses).NotEmpty().WithMessage("You have to define at least one address per person");
             RuleForEach(person => person.Addresses).SetValidator(new AddressValidator());
         }
-    }
 }
