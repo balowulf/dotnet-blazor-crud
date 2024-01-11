@@ -2,7 +2,10 @@
 @inject IUserService UserService
 
 <RadzenLayout Style="grid-template-areas: 'rz-sidebar rz-header' 'rz-sidebar rz-body'">
-    <NavLayout/>
+    @if (LoggedIn)
+    {
+        <NavLayout/>
+    }
     <RadzenBody>
         <div class="rz-p-4">
             @Body
@@ -12,9 +15,6 @@
 
 @code {
 
-    public bool LoggedIn
-    {
-        get { return UserService.User != null; }
-    }
+    private bool LoggedIn => UserService.User != null;
 
 }
