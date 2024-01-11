@@ -15,4 +15,7 @@
 		<PackageReference Include="Radzen.Blazor" Version="4.23.8" />
 		<PackageReference Include="System.Net.Http.Json" Version="7.0.0" />
 	</ItemGroup>
+	<ItemGroup>
+	  <_ContentIncludedByDefault Remove="Layout\MainLayout.razor" />
+	</ItemGroup>
 </Project>
