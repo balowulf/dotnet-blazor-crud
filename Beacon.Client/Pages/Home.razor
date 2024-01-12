@@ -1,9 +1,13 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Authorization
 @inject NavigationManager NavigationManager
+@inherits MainLayout
 
 @attribute [Authorize]
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello!</h1>
+@if (!IsLoading)
+{
+    <h1>Hello!</h1>
+}

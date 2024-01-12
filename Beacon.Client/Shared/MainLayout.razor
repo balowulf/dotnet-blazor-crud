@@ -7,6 +7,15 @@
         <NavLayout/>
     }
     <RadzenBody>
+        @if (IsLoading)
+        {
+            <RadzenProgressBarCircular
+                ProgressBarStyle="ProgressBarStyle.Primary"
+                Value="100"
+                ShowValue="false"
+                Mode="ProgressBarMode.Indeterminate"
+                Style="position: absolute; top: 25%; left: 45%;"/>
+        }
         <div class="rz-p-4">
             @Body
         </div>
@@ -16,5 +25,24 @@
 @code {
 
     private bool LoggedIn => UserService.User != null;
+
+    protected bool IsLoading = true;
+    
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+    
+    protected override async Task OnParametersSetAsync()
+    {
+        IsLoading = true;
+        await Task.Delay(TimeSpan.FromSeconds(1.5)); // Simulating an asynchronous operation (replace this with your actual logic)
+        IsLoading = false;
+        StateHasChanged();
+    }
 
 }
